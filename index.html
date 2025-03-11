@@ -3,136 +3,135 @@
 <head>
     <title>WSJF Prioritizer</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        select, button { margin: 5px; padding: 10px; font-size: 16px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid black; padding: 10px; text-align: center; }
-        th { background-color: #f2f2f2; }
-        .input-container { display: flex; flex-direction: column; margin-bottom: 10px; }
-        label { font-weight: bold; }
+        body { font-family: Arial, sans-serif; padding: 10px; margin: 0; }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: center;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        label, select, input {
+            font-size: 14px;
+        }
+
+        input, select {
+            padding: 4px;
+            width: 80px;
+        }
+
+        button {
+            font-size: 14px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            max-width: 600px;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .delete-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 2px 6px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .task-input {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        @media (max-width: 600px) {
+            .input-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
-    <h2>WSJF Prioritizer</h2>
-    
-    <div class="input-container">
-        <label for="task">Uppgift</label>
-        <input type="text" id="task" placeholder="Skriv uppgift här">
+
+    <div class="container">
+        <h2>WSJF Prioritizer</h2>
+
+        <div class="input-container">
+            <input type="text" id="task" class="task-input" placeholder="Skriv uppgift här">
+            <select id="businessValue">
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="5">5</option><option value="8">8</option><option value="13">13</option><option value="21">21</option>
+            </select>
+            <select id="timeCriticality">
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="5">5</option><option value="8">8</option><option value="13">13</option><option value="21">21</option>
+            </select>
+            <select id="riskReduction">
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="5">5</option><option value="8">8</option><option value="13">13</option><option value="21">21</option>
+            </select>
+            <select id="jobSize">
+                <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                <option value="5">5</option><option value="8">8</option><option value="13">13</option><option value="21">21</option>
+            </select>
+            <button onclick="addTask()">Lägg till</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Uppgift</th>
+                    <th>WSJF Score</th>
+                    <th>Ta bort</th>
+                </tr>
+            </thead>
+            <tbody id="taskList"></tbody>
+        </table>
     </div>
-    <div class="input-container">
-        <label for="businessValue">Värde för mig</label>
-        <select id="businessValue">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="5">5</option>
-            <option value="8">8</option>
-            <option value="13">13</option>
-            <option value="21">21</option>
-        </select>
-    </div>
-    <div class="input-container">
-        <label for="timeCriticality">Bråttom eller tidskritiskt</label>
-        <select id="timeCriticality">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="5">5</option>
-            <option value="8">8</option>
-            <option value="13">13</option>
-            <option value="21">21</option>
-        </select>
-    </div>
-    <div class="input-container">
-        <label for="riskReduction">Minska risk/ökad utveckling</label>
-        <select id="riskReduction">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="5">5</option>
-            <option value="8">8</option>
-            <option value="13">13</option>
-            <option value="21">21</option>
-        </select>
-    </div>
-    <div class="input-container">
-        <label for="jobSize">Arbetsinsats, komplexitet</label>
-        <select id="jobSize">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="5">5</option>
-            <option value="8">8</option>
-            <option value="13">13</option>
-            <option value="21">21</option>
-        </select>
-    </div>
-    
-    <button onclick="addTask()">Lägg till</button>
-    
-    <table>
-        <thead>
-            <tr>
-                <th>Uppgift</th>
-                <th>WSJF Score</th>
-                <th>Ta bort</th>
-            </tr>
-        </thead>
-        <tbody id="taskList"></tbody>
-    </table>
-    
+
     <script>
         let tasks = JSON.parse(localStorage.getItem("wsjfTasks")) || [];
-        
+
         function addTask() {
             let task = document.getElementById("task").value;
             let businessValue = parseInt(document.getElementById("businessValue").value);
             let timeCriticality = parseInt(document.getElementById("timeCriticality").value);
             let riskReduction = parseInt(document.getElementById("riskReduction").value);
             let jobSize = parseInt(document.getElementById("jobSize").value);
-            
+
             if (!task || isNaN(businessValue) || isNaN(timeCriticality) || isNaN(riskReduction) || isNaN(jobSize) || jobSize === 0) {
                 alert("Fyll i alla fält och se till att job size inte är 0.");
                 return;
             }
-            
+
             let wsjf = (businessValue + timeCriticality + riskReduction) / jobSize;
             tasks.push({ task, wsjf });
-            tasks.sort((a, b) => b.wsjf - a.wsjf);
-            
-            localStorage.setItem("wsjfTasks", JSON.stringify(tasks));
-            renderTasks();
-            resetFields();
-        }
-        
-        function renderTasks() {
-            let tableBody = document.getElementById("taskList");
-            tableBody.innerHTML = "";
-            tasks.forEach((item, index) => {
-                let row = `<tr>
-                    <td>${item.task}</td>
-                    <td>${item.wsjf.toFixed(2)}</td>
-                    <td><button onclick="removeTask(${index})">❌</button></td>
-                </tr>`;
-                tableBody.innerHTML += row;
-            });
-        }
-        
-        function removeTask(index) {
-            tasks.splice(index, 1);
-            localStorage.setItem("wsjfTasks", JSON.stringify(tasks));
-            renderTasks();
-        }
-        
-        function resetFields() {
-            document.getElementById('task').value = '';
-            document.getElementById('businessValue').value = '1';
-            document.getElementById('timeCriticality').value = '1';
-            document.getElementById('riskReduction').value = '1';
-            document.getElementById('jobSize').value = '1';
-        }
-        
-        document.addEventListener("DOMContentLoaded", renderTasks);
-    </script>
-</body>
-</html>
+            tasks.sort
