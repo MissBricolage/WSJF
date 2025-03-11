@@ -86,22 +86,31 @@
 
         <div class="input-container">
             <input type="text" id="task" class="task-input" placeholder="Skriv uppgift här">
+            
+            <label for="businessValue">Värde för mig</label>
             <select id="businessValue">
                 <option value="1">1</option><option value="2">2</option><option value="3">3</option>
                 <option value="5">5</option><option value="8">8</option><option value="13">13</option><option value="21">21</option>
             </select>
+            
+            <label for="timeCriticality">Bråttom</label>
             <select id="timeCriticality">
                 <option value="1">1</option><option value="2">2</option><option value="3">3</option>
                 <option value="5">5</option><option value="8">8</option><option value="13">13</option><option value="21">21</option>
             </select>
+            
+            <label for="riskReduction">Minska risk/ökad utveckling</label>
             <select id="riskReduction">
                 <option value="1">1</option><option value="2">2</option><option value="3">3</option>
                 <option value="5">5</option><option value="8">8</option><option value="13">13</option><option value="21">21</option>
             </select>
+            
+            <label for="jobSize">Arbetsinsats, svårighet</label>
             <select id="jobSize">
                 <option value="1">1</option><option value="2">2</option><option value="3">3</option>
                 <option value="5">5</option><option value="8">8</option><option value="13">13</option><option value="21">21</option>
             </select>
+            
             <button onclick="addTask()">Lägg till</button>
         </div>
 
@@ -109,6 +118,10 @@
             <thead>
                 <tr>
                     <th>Uppgift</th>
+                    <th>Värde</th>
+                    <th>Bråttom</th>
+                    <th>Risk</th>
+                    <th>Arbetsinsats</th>
                     <th>WSJF Score</th>
                     <th>Ta bort</th>
                 </tr>
@@ -133,7 +146,7 @@
             }
 
             let wsjf = (businessValue + timeCriticality + riskReduction) / jobSize;
-            tasks.push({ task, wsjf });
+            tasks.push({ task, businessValue, timeCriticality, riskReduction, jobSize, wsjf });
             tasks.sort((a, b) => b.wsjf - a.wsjf);
 
             localStorage.setItem("wsjfTasks", JSON.stringify(tasks));
@@ -147,6 +160,10 @@
             tasks.forEach((item, index) => {
                 let row = `<tr>
                     <td>${item.task}</td>
+                    <td>${item.businessValue}</td>
+                    <td>${item.timeCriticality}</td>
+                    <td>${item.riskReduction}</td>
+                    <td>${item.jobSize}</td>
                     <td>${item.wsjf.toFixed(2)}</td>
                     <td><button class="delete-btn" onclick="removeTask(${index})">❌</button></td>
                 </tr>`;
@@ -162,14 +179,11 @@
 
         function resetFields() {
             document.getElementById('task').value = '';
-            document.getElementById('businessValue').value = '1';
-            document.getElementById('timeCriticality').value = '1';
-            document.getElementById('riskReduction').value = '1';
-            document.getElementById('jobSize').value = '1';
         }
-
+        
         document.addEventListener("DOMContentLoaded", renderTasks);
     </script>
 
 </body>
 </html>
+
