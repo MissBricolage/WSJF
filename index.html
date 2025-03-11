@@ -82,7 +82,7 @@
     </table>
     
     <script>
-        let tasks = [];
+        let tasks = JSON.parse(localStorage.getItem("wsjfTasks")) || [];
         
         function addTask() {
             let task = document.getElementById("task").value;
@@ -99,8 +99,9 @@
             let wsjf = (businessValue + timeCriticality + riskReduction) / jobSize;
             tasks.push({ task, wsjf });
             tasks.sort((a, b) => b.wsjf - a.wsjf);
-            renderTasks();
             
+            localStorage.setItem("wsjfTasks", JSON.stringify(tasks));
+            renderTasks();
             resetFields();
         }
         
@@ -119,6 +120,7 @@
         
         function removeTask(index) {
             tasks.splice(index, 1);
+            localStorage.setItem("wsjfTasks", JSON.stringify(tasks));
             renderTasks();
         }
         
@@ -129,6 +131,8 @@
             document.getElementById('riskReduction').value = '1';
             document.getElementById('jobSize').value = '1';
         }
+        
+        document.addEventListener("DOMContentLoaded", renderTasks);
     </script>
 </body>
 </html>
