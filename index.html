@@ -134,4 +134,42 @@
 
             let wsjf = (businessValue + timeCriticality + riskReduction) / jobSize;
             tasks.push({ task, wsjf });
-            tasks.sort
+            tasks.sort((a, b) => b.wsjf - a.wsjf);
+
+            localStorage.setItem("wsjfTasks", JSON.stringify(tasks));
+            renderTasks();
+            resetFields();
+        }
+
+        function renderTasks() {
+            let tableBody = document.getElementById("taskList");
+            tableBody.innerHTML = "";
+            tasks.forEach((item, index) => {
+                let row = `<tr>
+                    <td>${item.task}</td>
+                    <td>${item.wsjf.toFixed(2)}</td>
+                    <td><button class="delete-btn" onclick="removeTask(${index})">❌</button></td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        function removeTask(index) {
+            tasks.splice(index, 1);
+            localStorage.setItem("wsjfTasks", JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function resetFields() {
+            document.getElementById('task').value = '';
+            document.getElementById('businessValue').value = '1';
+            document.getElementById('timeCriticality').value = '1';
+            document.getElementById('riskReduction').value = '1';
+            document.getElementById('jobSize').value = '1';
+        }
+
+        document.addEventListener("DOMContentLoaded", renderTasks);
+    </script>
+
+</body>
+</html>
